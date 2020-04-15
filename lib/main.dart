@@ -15,7 +15,6 @@ class Home extends StatefulWidget {
 }
 
 class HomeState extends State<Home> {
-
   TextEditingController keyInputController = new TextEditingController();
   TextEditingController valueInputController = new TextEditingController();
 
@@ -32,7 +31,9 @@ class HomeState extends State<Home> {
       dir = directory;
       jsonFile = new File(dir.path + "/" + fileName);
       fileExists = jsonFile.existsSync();
-      if (fileExists) this.setState(() => fileContent = json.decode(jsonFile.readAsStringSync()));
+      if (fileExists)
+        this.setState(
+            () => fileContent = json.decode(jsonFile.readAsStringSync()));
     });
   }
 
@@ -41,9 +42,14 @@ class HomeState extends State<Home> {
     keyInputController.dispose();
     valueInputController.dispose();
     super.dispose();
+            
+     setState(() {
+       fileContent.clear();
+     });
   }
 
-  void createFile(Map<String, dynamic> content, Directory dir, String fileName) {
+  void createFile(
+      Map<String, dynamic> content, Directory dir, String fileName) {
     print("Creating file!");
     File file = new File(dir.path + "/" + fileName);
     file.createSync();
@@ -53,11 +59,15 @@ class HomeState extends State<Home> {
 
   void writeToFile({String key, dynamic value}) {
     print("Writing to file!");
-    key="name";
-    Map<String, dynamic> content = {key: value};
+    // key="name";
+    // Map<String, dynamic> content = {key: value,};
+    Map<String, dynamic> content = {
+      key:value,
+    };
     if (fileExists) {
       print("File exists");
-      Map<String, dynamic> jsonFileContent = json.decode(jsonFile.readAsStringSync());
+      Map<String, dynamic> jsonFileContent =
+          json.decode(jsonFile.readAsStringSync());
       jsonFileContent.addAll(content);
       jsonFile.writeAsStringSync(json.encode(jsonFileContent));
     } else {
@@ -71,11 +81,16 @@ class HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
-      appBar: new AppBar(title: new Text("JSON Tutorial"),),
+      appBar: new AppBar(
+        title: new Text("JSON Tutorial"),
+      ),
       body: new Column(
         children: <Widget>[
           new Padding(padding: new EdgeInsets.only(top: 10.0)),
-          new Text("File content: ", style: new TextStyle(fontWeight: FontWeight.bold),),
+          new Text(
+            "File content: ",
+            style: new TextStyle(fontWeight: FontWeight.bold),
+          ),
           new Text(fileContent.toString()),
           new Padding(padding: new EdgeInsets.only(top: 10.0)),
           new Text("Add to JSON file: "),
@@ -88,7 +103,15 @@ class HomeState extends State<Home> {
           new Padding(padding: new EdgeInsets.only(top: 20.0)),
           new RaisedButton(
             child: new Text("Add key, value pair"),
-            onPressed: () => writeToFile( value:valueInputController.text),
+            onPressed: () {
+              
+     setState(() {
+      //  fileContent.clear();
+     });
+              writeToFile(
+                  key: keyInputController.text,
+                  value: valueInputController.text);
+            },
           )
         ],
       ),
