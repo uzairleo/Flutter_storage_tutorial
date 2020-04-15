@@ -51,8 +51,9 @@ class HomeState extends State<Home> {
     file.writeAsStringSync(json.encode(content));
   }
 
-  void writeToFile(String key, dynamic value) {
+  void writeToFile({String key, dynamic value}) {
     print("Writing to file!");
+    key="name";
     Map<String, dynamic> content = {key: value};
     if (fileExists) {
       print("File exists");
@@ -87,7 +88,7 @@ class HomeState extends State<Home> {
           new Padding(padding: new EdgeInsets.only(top: 20.0)),
           new RaisedButton(
             child: new Text("Add key, value pair"),
-            onPressed: () => writeToFile(keyInputController.text, valueInputController.text),
+            onPressed: () => writeToFile( value:valueInputController.text),
           )
         ],
       ),
